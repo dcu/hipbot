@@ -17,6 +17,7 @@ var (
 	HandlersList = []handlers.Handler{
 		&handlers.TimeHandler{},
 		&handlers.LoggerHandler{},
+		&handlers.RubyHandler{},
 	}
 )
 
