@@ -23,10 +23,10 @@ var (
 
 func init() {
 	configFileFlag = flag.String("config", "config.yml", "Config file")
-	shared.Config.Username = flag.String("username", "", "Username")
-	shared.Config.Password = flag.String("password", "", "Password")
-	shared.Config.FullName = flag.String("full_name", "", "Full Name")
-	shared.Config.Room = flag.String("room", "", "Hipchat room")
+	shared.Config.Username = flag.String("username", os.Getenv("HIPBOT_USERNAME"), "Username")
+	shared.Config.Password = flag.String("password", os.Getenv("HIPBOT_PASSWORD"), "Password")
+	shared.Config.FullName = flag.String("full_name", os.Getenv("HIPBOT_FULL_NAME"), "Full Name")
+	shared.Config.Room = flag.String("room", os.Getenv("HIPBOT_ROOM"), "Hipchat room")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
