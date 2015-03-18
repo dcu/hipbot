@@ -26,8 +26,8 @@ func (ruby *RubyHandler) Process(client *hipchat.Client, roomId string, message 
 	cmd := exec.Command(commandName, args...)
 	output, err := cmd.Output()
 	if err != nil {
-		client.Say(roomId, "Bot", "Error: "+err.Error())
+		client.Say(roomId, "Ruby", "Error: "+err.Error())
 	} else {
-		client.Say(roomId, "Bot", string(output))
+		client.Say(roomId, "Ruby", string(output))
 	}
 }

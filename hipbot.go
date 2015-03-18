@@ -3,8 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/daneharrigan/hipchat"
-	"github.com/dcu/hipbot/handlers"
+	"github.com/dcu/hipbot/connection"
 	"github.com/dcu/hipbot/shared"
 	"github.com/dcu/hipbot/web"
 	"os"
@@ -14,13 +13,7 @@ var (
 	configFileFlag *string
 )
 
-var (
-	HandlersList = []handlers.Handler{
-		&handlers.TimeHandler{},
-		&handlers.LoggerHandler{},
-		&handlers.RubyHandler{},
-	}
-)
+
 
 func init() {
 	configFileFlag = flag.String("config", "config.yml", "Config file")
@@ -57,30 +50,9 @@ func loadConfig() {
 	}
 }
 
-func startListeningMessages(client *hipchat.Client) {
-	roomId := *shared.Config.Room + "@conf.hipchat.com"
-	client.Status("chat")
-	client.Join(roomId, *shared.Config.FullName)
-	for message := range client.Messages() {
-		for _, handler := range HandlersList {
-			if handler.Matches(message) {
-				handler.Process(client, roomId, message)
-			}
-		}
-	}
-}
-
 func main() {
 	loadConfig()
 
-	resource := "bot"
-	client, err := hipchat.NewClient(*shared.Config.Username, *shared.Config.Password, resource)
-	if err != nil {
-		fmt.Printf("Client Error: %s\n", err)
-		flag.Usage()
-		os.Exit(1)
-	}
-
-	go startListeningMessages(client)
+	connection.Start()
 	web.Start()
 }
