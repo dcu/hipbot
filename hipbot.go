@@ -39,6 +39,11 @@ func init() {
 func loadConfig() {
 	flag.Parse()
 
+	if shared.Config.IsConfigured() {
+		// Already configured.
+		return
+	}
+
 	if _, err := os.Stat(*configFileFlag); os.IsNotExist(err) {
 		shared.WriteSampleFile(*configFileFlag)
 	}
