@@ -6,6 +6,7 @@ import (
 	"github.com/daneharrigan/hipchat"
 	"github.com/dcu/hipbot/handlers"
 	"github.com/dcu/hipbot/shared"
+	"github.com/dcu/hipbot/web"
 	"os"
 )
 
@@ -51,18 +52,8 @@ func loadConfig() {
 	}
 }
 
-func main() {
-	loadConfig()
-
+func startListeningMessages(client *hipchat.Client) {
 	roomId := *shared.Config.Room + "@conf.hipchat.com"
-	resource := "bot"
-	client, err := hipchat.NewClient(*shared.Config.Username, *shared.Config.Password, resource)
-	if err != nil {
-		fmt.Printf("Client Error: %s\n", err)
-		flag.Usage()
-		os.Exit(1)
-	}
-
 	client.Status("chat")
 	client.Join(roomId, *shared.Config.FullName)
 	for message := range client.Messages() {
@@ -72,4 +63,19 @@ func main() {
 			}
 		}
 	}
+}
+
+func main() {
+	loadConfig()
+
+	resource := "bot"
+	client, err := hipchat.NewClient(*shared.Config.Username, *shared.Config.Password, resource)
+	if err != nil {
+		fmt.Printf("Client Error: %s\n", err)
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	go startListeningMessages(client)
+	web.Start()
 }
