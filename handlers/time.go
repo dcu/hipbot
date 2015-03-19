@@ -9,7 +9,7 @@ type TimeHandler struct {
 }
 
 func (timeHandler *TimeHandler) Matches(message *hipchat.Message) bool {
-	return message.Body == "@hipbot time"
+	return message.Body == "time"
 }
 
 func (timeHandler *TimeHandler) Process(client *hipchat.Client, roomId string, message *hipchat.Message) {

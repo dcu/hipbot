@@ -15,6 +15,7 @@ var (
 		&handlers.TimeHandler{},
 		&handlers.LoggerHandler{},
 		&handlers.RubyHandler{},
+		&handlers.GiphyHandler{},
 	}
 )
 
@@ -38,12 +39,11 @@ func startListeningMessages(client *hipchat.Client) {
 // Connections are dropped after 150s of inactivity. We suggest sending a single space (" ") as keepalive data every 60 seconds
 func startPinger(client *hipchat.Client) {
 	ticker := time.NewTicker(60 * time.Second)
-	roomId := *shared.Config.Room + "@conf.hipchat.com"
 
 	go func() {
 		for {
 			<-ticker.C
-			client.Say(roomId, "Pinger", " ")
+			client.Say("", "Pinger", " ")
 		}
 	}()
 }
