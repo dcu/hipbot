@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/daneharrigan/hipchat"
+	"github.com/dcu/hipbot/xmpp"
 	"os/exec"
 	"strings"
 )
@@ -9,12 +9,12 @@ import (
 type RubyHandler struct {
 }
 
-func (ruby *RubyHandler) Matches(message *hipchat.Message) bool {
-	return strings.HasPrefix(message.Body, "ruby:")
+func (ruby *RubyHandler) Matches(message *xmpp.Chat) bool {
+	return strings.HasPrefix(message.Text, "ruby:")
 }
 
-func (ruby *RubyHandler) Process(client *hipchat.Client, roomId string, message *hipchat.Message) {
-	code := strings.Replace(message.Body, "ruby:", "", 1)
+func (ruby *RubyHandler) Process(client *xmpp.Client, roomId string, message *xmpp.Chat) {
+	code := strings.Replace(message.Text, "ruby:", "", 1)
 	code = strings.Replace(code, `\`, `\\`, -1)
 	code = strings.Replace(code, `'`, `\'`, -1)
 
@@ -27,8 +27,16 @@ func (ruby *RubyHandler) Process(client *hipchat.Client, roomId string, message 
 	cmd := exec.Command(commandName, args...)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		client.Say(roomId, "Ruby", "Error: "+string(output))
+		client.Send(xmpp.Chat{
+			Remote: roomId,
+			Text:   "Error: " + string(output),
+			Type:   "groupchat",
+		})
 	} else {
-		client.Say(roomId, "Ruby", string(output))
+		client.Send(xmpp.Chat{
+			Remote: roomId,
+			Text:   string(output),
+			Type:   "groupchat",
+		})
 	}
 }

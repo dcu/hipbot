@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"github.com/daneharrigan/hipchat"
+	"github.com/dcu/hipbot/xmpp"
 )
 
 type Handler interface {
-	Matches(message *hipchat.Message) bool
-	Process(client *hipchat.Client, roomJid string, message *hipchat.Message)
+	Matches(message *xmpp.Chat) bool
+	Process(client *xmpp.Client, roomJid string, message *xmpp.Chat)
 }

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/daneharrigan/hipchat"
+	"github.com/dcu/hipbot/xmpp"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -44,12 +44,12 @@ type GiphyResults struct {
 type GiphyHandler struct {
 }
 
-func (giphy *GiphyHandler) Matches(message *hipchat.Message) bool {
-	return strings.HasPrefix(message.Body, "giphy:")
+func (giphy *GiphyHandler) Matches(message *xmpp.Chat) bool {
+	return strings.HasPrefix(message.Text, "giphy:")
 }
 
-func (giphy *GiphyHandler) Process(client *hipchat.Client, roomId string, message *hipchat.Message) {
-	search := strings.Replace(message.Body, "giphy:", "", 1)
+func (giphy *GiphyHandler) Process(client *xmpp.Client, roomId string, message *xmpp.Chat) {
+	search := strings.Replace(message.Text, "giphy:", "", 1)
 
 	url := `http://api.giphy.com/v1/gifs/search?q=` + url.QueryEscape(search) + `&limit=10&api_key=dc6zaTOxFJmzC`
 	resp, err := http.Get(url)
@@ -68,8 +68,16 @@ func (giphy *GiphyHandler) Process(client *hipchat.Client, roomId string, messag
 
 	if resultsCount > 0 {
 		image := results.Data[rand.Intn(resultsCount)]
-		client.Say(roomId, "Giphy", image.Images.Original.URL)
+		client.Send(xmpp.Chat{
+			Remote: roomId,
+			Text:   image.Images.Original.URL,
+			Type:   "groupchat",
+		})
 	} else {
-		client.Say(roomId, "Giphy", "Couldn't find any result.")
+		client.Send(xmpp.Chat{
+			Remote: roomId,
+			Text:   "Couldn't find any results.",
+			Type:   "groupchat",
+		})
 	}
 }

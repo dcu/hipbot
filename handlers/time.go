@@ -1,18 +1,22 @@
 package handlers
 
 import (
-	"github.com/daneharrigan/hipchat"
+	"github.com/dcu/hipbot/xmpp"
 	"time"
 )
 
 type TimeHandler struct {
 }
 
-func (timeHandler *TimeHandler) Matches(message *hipchat.Message) bool {
-	return message.Body == "time"
+func (timeHandler *TimeHandler) Matches(message *xmpp.Chat) bool {
+	return message.Text == "time"
 }
 
-func (timeHandler *TimeHandler) Process(client *hipchat.Client, roomId string, message *hipchat.Message) {
+func (timeHandler *TimeHandler) Process(client *xmpp.Client, roomId string, message *xmpp.Chat) {
 	now := time.Now().String()
-	client.Say(roomId, "Bot", "The time is: "+now)
+	client.Send(xmpp.Chat{
+		Remote: roomId,
+		Type:   "groupchat",
+		Text:   "The time is: " + now,
+	})
 }

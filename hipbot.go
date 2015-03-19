@@ -13,8 +13,6 @@ var (
 	configFileFlag *string
 )
 
-
-
 func init() {
 	configFileFlag = flag.String("config", "config.yml", "Config file")
 	shared.Config.Username = flag.String("username", os.Getenv("HIPBOT_USERNAME"), "Username")
