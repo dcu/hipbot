@@ -32,13 +32,13 @@ func processMessage(roomId string, message *xmpp.Chat) {
 
 func startListeningMessages() {
 	roomId := *shared.Config.Room + "@conf.hipchat.com"
-	Client.JoinMUC(roomId, *shared.Config.FullName)
 
 	go func() {
 		for {
 			chat, err := Client.Recv()
 			if err != nil {
 				println("Error:", err.Error())
+				connect()
 				continue
 			}
 
@@ -80,7 +80,7 @@ func startPinger() {
 //startPinger()
 //}
 
-func Start() {
+func connect() {
 	server := "chat.hipchat.com"
 	xmpp.DefaultConfig = tls.Config{
 		ServerName:         server,
@@ -101,13 +101,22 @@ func Start() {
 		StatusMessage: "Available",
 	}
 
+	println("Connecting to HipChat...")
 	talk, err = options.NewClient()
 	if err != nil {
-		panic(err)
+		println("Error:", err.Error())
+		connect()
+		return
 	}
 
-	Client = talk
+	roomId := *shared.Config.Room + "@conf.hipchat.com"
+	talk.JoinMUC(roomId, *shared.Config.FullName)
 
+	Client = talk
+}
+
+func Start() {
+	connect()
 	startListeningMessages()
 	startPinger()
 }

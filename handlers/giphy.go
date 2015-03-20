@@ -51,7 +51,7 @@ func (giphy *GiphyHandler) Matches(message *xmpp.Chat) bool {
 func (giphy *GiphyHandler) Process(client *xmpp.Client, roomId string, message *xmpp.Chat) {
 	search := strings.Replace(message.Text, "giphy:", "", 1)
 
-	url := `http://api.giphy.com/v1/gifs/search?q=` + url.QueryEscape(search) + `&limit=10&api_key=dc6zaTOxFJmzC`
+	url := `http://api.giphy.com/v1/gifs/search?q=` + url.QueryEscape(search) + `&limit=50&api_key=dc6zaTOxFJmzC`
 	resp, err := http.Get(url)
 	defer resp.Body.Close()
 
