@@ -9,6 +9,7 @@ import (
 type ConfigStruct struct {
 	Username *string `yaml:"username"`
 	Password *string `yaml:"password"`
+	ApiKey   *string `yaml:"api_key"`
 	Room     *string `yaml:"room"`
 	FullName *string `yaml:"full_name"`
 }

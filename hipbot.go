@@ -19,6 +19,7 @@ func init() {
 	shared.Config.Password = flag.String("password", os.Getenv("HIPBOT_PASSWORD"), "Password")
 	shared.Config.FullName = flag.String("full_name", os.Getenv("HIPBOT_FULL_NAME"), "Full Name")
 	shared.Config.Room = flag.String("room", os.Getenv("HIPBOT_ROOM"), "Hipchat room")
+	shared.Config.ApiKey = flag.String("api_key", os.Getenv("HIPBOT_API_KEY"), "API key")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])

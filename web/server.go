@@ -25,8 +25,8 @@ func PostNotification(response http.ResponseWriter, request *http.Request) {
 }
 
 func Start() {
-	http.HandleFunc("/", GetIndex)
-	http.HandleFunc("/notifications", PostNotification)
+	http.Handle("/", NewHandler(GetIndex))
+	http.Handle("/notifications", NewHandler(PostNotification))
 
 	port := os.Getenv("PORT")
 	if port == "" {
