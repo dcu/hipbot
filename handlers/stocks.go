@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-type YahooResponse struct {
+type YahooFinanceResponse struct {
 	Query struct {
 		Results struct {
 			Quote Quote `json:"quote"`
@@ -54,7 +54,7 @@ func (stocks *StocksHandler) Process(client *xmpp.Client, roomId string, message
 		return
 	}
 
-	results := &YahooResponse{}
+	results := &YahooFinanceResponse{}
 	body, err := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(body, results)
 

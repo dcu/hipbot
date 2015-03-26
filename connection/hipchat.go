@@ -20,6 +20,7 @@ var (
 		&handlers.RubyHandler{},
 		&handlers.GiphyHandler{},
 		&handlers.StocksHandler{},
+		&handlers.CurrencyHandler{},
 	}
 )
 
