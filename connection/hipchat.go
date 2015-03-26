@@ -19,6 +19,7 @@ var (
 		&handlers.LoggerHandler{},
 		&handlers.RubyHandler{},
 		&handlers.GiphyHandler{},
+		&handlers.StocksHandler{},
 	}
 )
 
