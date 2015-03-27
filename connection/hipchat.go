@@ -27,9 +27,18 @@ var (
 func processMessage(roomId string, message *xmpp.Chat) {
 	for _, handler := range HandlersList {
 		if handler.Matches(message) {
-			handler.Process(Client, roomId, message)
+			processMessageWithHandler(&handler, roomId, message)
 		}
 	}
+}
+
+func processMessageWithHandler(handler *handlers.Handler, roomId string, message *xmpp.Chat) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("Recovered from: %#v\n", err)
+		}
+	}()
+	(*handler).Process(Client, roomId, message)
 }
 
 func startListeningMessages() {
@@ -46,7 +55,7 @@ func startListeningMessages() {
 
 			switch v := chat.(type) {
 			case xmpp.Chat:
-				processMessage(roomId, &v)
+				go processMessage(roomId, &v)
 			case xmpp.Presence:
 				fmt.Println("PRESENCE:", v.From, v.Show)
 			}

@@ -41,6 +41,9 @@ func (stocks *CurrencyHandler) Matches(message *xmpp.Chat) bool {
 
 func (stocks *CurrencyHandler) Process(client *xmpp.Client, roomId string, message *xmpp.Chat) {
 	matches := pattern.FindStringSubmatch(message.Text)
+	if len(matches) < 5 {
+		return
+	}
 
 	from := matches[3]
 	to := matches[4]
